@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function Cadastrar(){
+            var cpfjs = document.getElementById("cpf").value;
+            var nomejs = document.getElementById("nome").value;
+            var contatojs = document.getElementById("contato").value;
+            var requisicao = new XMLHttpRequest();
+            requisicao.open("GET", "http://localhost/Paulo-PW3-2025/SistemaPessoa/"+
+                "controllerPessoa.php?cpf="+cpfjs+"&nome="+nomejs+"&contato="+contatojs);
+
+                requisicao.send();
+
+                requisicao.onload = function(){
+                    alert(this.responseText);
+                }
+        }
+    </script>
+</head>
+<body>
+    <p><input id="cpf" placeholder="CPF"></p>
+    <p><input id="nome" placeholder="Nome"></p>
+    <p><input id="contato" placeholder="Contato"></p>
+    <p><button onclick="Cadastrar()">Cadastrar</button></p>
+    <p></p>
+</body>
+</html>
