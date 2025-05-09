@@ -1,31 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sistema Pessoa e Agenda</title>
     <script>
-        function Cadastrar(){
-            var cpfjs = document.getElementById("cpf").value;
-            var nomejs = document.getElementById("nome").value;
-            var contatojs = document.getElementById("contato").value;
-            var requisicao = new XMLHttpRequest();
-            requisicao.open("GET", "http://localhost/Paulo-PW3-2025/SistemaPessoa/"+
-                "controllerPessoa.php?cpf="+cpfjs+"&nome="+nomejs+"&contato="+contatojs);
+    function cadastrar() {
+        var cpfjs = document.getElementById("cpf").value;
+        var nomejs = document.getElementById("nome").value;
+        var contatojs = document.getElementById("contato").value;
 
-                requisicao.send();
+        var requisicao = new XMLHttpRequest();
+        requisicao.open("GET","controllerPessoa.php?cpf="+cpfjs+
+                        "&nome="+nomejs+"&contato="+contatojs+"&acao=inserir"
+                       );
+        requisicao.send();
 
-                requisicao.onload = function(){
-                    alert(this.responseText);
-                }
+        requisicao.onload = function(){
+            document.getElementById("resposta").innerHTML= this.responseText;
         }
+    }
+
+    function apagar() {
+        var cpfjs = document.getElementById("cpf").value;
+
+        var requisicao = new XMLHttpRequest();
+        requisicao.open("GET","controllerPessoa.php?cpf="+cpfjs+"&acao=apagar");
+        requisicao.send();
+
+        requisicao.onload = function(){
+            document.getElementById("resposta").innerHTML= this.responseText;
+        }
+    }
+
+    function atualizar() {
+        var cpfjs = document.getElementById("cpf").value;
+        var nomejs = document.getElementById("nome").value;
+        var contatojs = document.getElementById("contato").value;
+
+        var requisicao = new XMLHttpRequest();
+        requisicao.open("GET","controllerPessoa.php?cpf="+cpfjs+
+                        "&nome="+nomejs+"&contato="+contatojs+"&acao=atualizar"
+                       );
+        requisicao.send();
+
+        requisicao.onload = function(){
+            document.getElementById("resposta").innerHTML= this.responseText;
+        }
+    }
+
+    function consultar() {
+        var requisicao = new XMLHttpRequest();
+        requisicao.open("GET","controllerPessoa.php?acao=consultar");
+        requisicao.send();
+
+        var html = "";
+        requisicao.onload = function(){
+            var resposta = JSON.parse(this.responseText);
+            for(var i=0; i<resposta.length; i++){
+                html += "CPF: " + resposta[i].cpf + " | Nome: " + resposta[i].nome + " | Contato: " + resposta[i].contato + "<br>";
+            }
+            document.getElementById("resposta").innerHTML = html;
+        }
+    }
+
+    function cadastrarAgenda() {
+        var cpf = document.getElementById("cpf").value;
+        var data = document.getElementById("data").value;
+        var descricao = document.getElementById("descricao").value;
+
+        var requisicao = new XMLHttpRequest();
+        requisicao.open("GET", "controllerAgenda.php?acao=inserir&cpf=" + cpf +
+                        "&data=" + data + "&descricao=" + descricao);
+        requisicao.send();
+
+        requisicao.onload = function(){
+            document.getElementById("respostaAgenda").innerHTML = this.responseText;
+        }
+    }
+
+    function consultarAgenda() {
+        var requisicao = new XMLHttpRequest();
+        requisicao.open("GET", "controllerAgenda.php?acao=consultar");
+        requisicao.send();
+
+        requisicao.onload = function(){
+            var resposta = JSON.parse(this.responseText);
+            var html = "";
+            for (var i = 0; i < resposta.length; i++) {
+                html += "Código: " + resposta[i].codigo + 
+                        " | CPF: " + resposta[i].cpf + 
+                        " | Nome: " + resposta[i].nome + 
+                        " | Data: " + resposta[i].data + 
+                        " | Descrição: " + resposta[i].descricao + "<br>";
+            }
+            document.getElementById("respostaAgenda").innerHTML = html;
+        }
+    }
     </script>
 </head>
 <body>
-    <p><input id="cpf" placeholder="CPF"></p>
-    <p><input id="nome" placeholder="Nome"></p>
-    <p><input id="contato" placeholder="Contato"></p>
-    <p><button onclick="Cadastrar()">Cadastrar</button></p>
-    <p></p>
+    <h2>Cadastro de Pessoa</h2>
+    <input id="cpf" placeholder="CPF">
+    <input id="nome" placeholder="Nome">
+    <input id="contato" placeholder="Contato">
+    <button onclick="cadastrar()">Cadastrar</button>
+    <button onclick="apagar()">Apagar</button>
+    <button onclick="atualizar()">Atualizar</button>
+    <button onclick="consultar()">Consultar</button>
+    <p id="resposta"></p>
+
+    <hr>
+
+    <h2>Agenda de Compromissos</h2>
+    <input id="data" type="date" placeholder="Data">
+    <input id="descricao" placeholder="Descrição do compromisso">
+    <button onclick="cadastrarAgenda()">Cadastrar Compromisso</button>
+    <button onclick="consultarAgenda()">Listar Compromissos</button>
+    <p id="respostaAgenda"></p>
 </body>
 </html>

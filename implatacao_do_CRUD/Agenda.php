@@ -1,8 +1,10 @@
 <?php
 class Agenda {
-    private $codigo, $cpf, $data, $descricao;
+    private $codigo;
+    private $cpf;
+    private $data;
+    private $descricao;
 
-    // Adicionado getter/setter para codigo
     public function getCodigo() { return $this->codigo; }
     public function setCodigo($codigo) { $this->codigo = $codigo; }
 

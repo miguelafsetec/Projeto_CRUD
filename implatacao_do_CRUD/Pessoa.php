@@ -1,5 +1,4 @@
 <?php
-    //Objeto Entidade Pessoa
     class Pessoa{   
         private $cpf, $nome, $contato;
 
@@ -24,4 +23,4 @@
             $this->contato = $contato;
         }
     }
-?>
+?>  
